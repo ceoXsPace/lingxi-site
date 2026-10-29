@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>灵犀AI主播 — 抖音直播 AI 口播助手 | 无人值守 · 智能播报 · 弹幕互动</title>
+<meta name="description" content="灵犀AI主播：面向抖音直播场景的 AI 口播助手。商品链接一键生成千字口播文案，真人音色循环播报，弹幕AI 智能回复，多篇文案无缝轮换，数小时无人值守直播。">
+<link rel="icon" type="image/png" href="assets/logo/app_96.png">
+<style>
+  :root{
+    --red:#E0103C;
+    --red-soft:#FF5C7A;
+    --red-bg:#FFF1F3;
+    --ink:#1A1A1E;
+    --ink-2:#4A4A52;
+    --ink-3:#8A8A93;
+    --line:#ECECEF;
+    --bg:#FFFFFF;
+    --bg-soft:#F7F7F9;
+    --card:#FFFFFF;
+    --radius:16px;
+    --maxw:1160px;
+    --shadow:0 20px 60px rgba(20,20,30,.10);
+    --shadow-sm:0 6px 24px rgba(20,20,30,.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,-apple-system,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.75;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ---------- 导航 ---------- */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;gap:36px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+  .brand img{width:30px;height:30px;border-radius:8px}
+  .brand em{font-style:normal;color:var(--red)}
+  .nav-links{display:flex;gap:26px;margin-left:auto;font-size:14.5px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--red)}
+  .nav-cta{
+    margin-left:8px;background:var(--red);color:#fff;padding:8px 20px;border-radius:999px;
+    font-size:14px;font-weight:600;transition:.2s;white-space:nowrap;
+  }
+  .nav-cta:hover{background:#C50C33}
+  @media (max-width:900px){.nav-links{display:none}}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:88px 0 40px;text-align:center;background:
+    radial-gradient(900px 420px at 50% -80px, #FFE9ED 0%, rgba(255,255,255,0) 70%);}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--red);
+    background:var(--red-bg);border:1px solid #FFD7DE;
+    padding:6px 16px;border-radius:999px;letter-spacing:1px;
+  }
+  .hero h1{
+    font-size:clamp(34px,5.4vw,58px);line-height:1.22;font-weight:800;
+    letter-spacing:.5px;margin:22px auto 18px;max-width:860px;
+  }
+  .hero h1 .hl{color:var(--red)}
+  .hero p.sub{
+    font-size:clamp(15px,1.6vw,18px);color:var(--ink-2);max-width:720px;margin:0 auto;
+  }
+  .hero-actions{display:flex;gap:16px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 34px;border-radius:12px;font-size:16px;font-weight:600;transition:.2s;
+  }
+  .btn-primary{background:var(--red);color:#fff;box-shadow:0 10px 26px rgba(224,16,60,.28)}
+  .btn-primary:hover{background:#C50C33;transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--red);color:var(--red)}
+  .hero-shot{
+    max-width:980px;margin:56px auto 0;border-radius:18px;overflow:hidden;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+  }
+  .hero-shot img{width:100%}
+  .version-tag{margin-top:16px;font-size:13px;color:var(--ink-3)}
+
+  /* ---------- 数据条 ---------- */
+  .stats{padding:64px 0 8px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+  .stat b{display:block;font-size:34px;font-weight:800;color:var(--red)}
+  .stat span{font-size:14px;color:var(--ink-3)}
+  @media (max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- 通用 Section ---------- */
+  section{padding:96px 0}
+  .sec-head{text-align:center;max-width:720px;margin:0 auto 56px}
+  .sec-head .eyebrow{margin-bottom:18px}
+  .sec-head h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:.5px}
+  .sec-head p{color:var(--ink-2);margin-top:14px;font-size:16px}
+
+  /* ---------- 功能特性 ---------- */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media (max-width:980px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.feat-grid{grid-template-columns:1fr}}
+  .feat{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px 26px;transition:.25s;
+  }
+  .feat:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm);border-color:#FFD7DE}
+  .feat .ico{
+    width:46px;height:46px;border-radius:12px;background:var(--red-bg);
+    display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;
+  }
+  .feat h3{font-size:17.5px;font-weight:700;margin-bottom:8px}
+  .feat p{font-size:14.5px;color:var(--ink-2)}
+
+  /* ---------- 功能展示（图文分栏） ---------- */
+  .showcase{padding:96px 0}
+  .showcase-row{
+    display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:center;
+  }
+  .showcase-row.flip{grid-template-columns:6fr 5fr}
+  @media (max-width:980px){
+    .showcase-row,.showcase-row.flip{grid-template-columns:1fr;gap:32px}
+    .showcase-row.flip .showcase-media{order:-1}
+  }
+  .showcase-copy .eyebrow{margin-bottom:16px}
+  .showcase-copy h2{font-size:clamp(24px,3vw,34px);font-weight:800;line-height:1.3}
+  .showcase-copy>p{color:var(--ink-2);margin-top:14px;font-size:15.5px}
+  .showcase-copy ul{list-style:none;margin-top:22px}
+  .showcase-copy li{
+    font-size:14.8px;color:var(--ink-2);padding:9px 0 9px 30px;position:relative;
+    border-bottom:1px dashed var(--line);
+  }
+  .showcase-copy li:last-child{border-bottom:none}
+  .showcase-copy li::before{
+    content:"✓";position:absolute;left:2px;top:9px;width:20px;height:20px;
+    background:var(--red-bg);color:var(--red);border-radius:6px;
+    font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  }
+  .showcase-copy li b{color:var(--ink)}
+  .showcase-media img{
+    border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);
+  }
+
+  /* ---------- 工作流程 ---------- */
+  .flow{background:var(--bg-soft)}
+  .flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;counter-reset:step}
+  @media (max-width:980px){.flow-steps{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.flow-steps{grid-template-columns:1fr}}
+  .step{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;position:relative;
+  }
+  .step::before{
+    counter-increment:step;content:"0" counter(step);
+    font-size:13px;font-weight:800;color:var(--red);letter-spacing:2px;
+  }
+  .step h3{font-size:16.5px;font-weight:700;margin:10px 0 6px}
+  .step p{font-size:13.8px;color:var(--ink-2)}
+
+  /* ---------- 深色技术段 ---------- */
+  .tech{background:#141419;color:#F5F5F7}
+  .tech .sec-head h2{color:#fff}
+  .tech .sec-head p{color:#B9B9C2}
+  .tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media (max-width:760px){.tech-grid{grid-template-columns:1fr}}
+  .tech-item{
+    background:#1E1E25;border:1px solid #2C2C34;border-radius:var(--radius);
+    padding:26px 26px 24px;
+  }
+  .tech-item h3{font-size:16.5px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px}
+  .tech-item h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--red-soft);flex:none}
+  .tech-item p{font-size:14.2px;color:#B9B9C2;margin-top:8px}
+  .tech-note{
+    margin-top:40px;text-align:center;font-size:14px;color:#8A8A93;
+    border-top:1px solid #2C2C34;padding-top:32px;
+  }
+
+  /* ---------- 界面预览 ---------- */
+  .shot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media (max-width:980px){.shot-grid{grid-template-columns:1fr}}
+  .shot{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.25s}
+  .shot:hover{box-shadow:var(--shadow-sm)}
+  .shot img{
+    width:100%;height:360px;object-fit:contain;object-position:center top;
+    border-bottom:1px solid var(--line);background:#FAFAFB;padding:10px;
+  }
+  .shot figcaption{padding:18px 20px}
+  .shot figcaption b{font-size:15.5px;display:block;margin-bottom:4px}
+  .shot figcaption span{font-size:13.5px;color:var(--ink-3)}
+
+  /* ---------- 点击放大 ---------- */
+  .shot img{cursor:pointer}
+  .lightbox{
+    position:fixed;inset:0;z-index:999;display:none;
+    background:rgba(15,15,20,.88);padding:32px;
+    align-items:center;justify-content:center;cursor:zoom-out;
+  }
+  .lightbox.on{display:flex}
+  .lightbox img{
+    max-width:96vw;max-height:92vh;border-radius:10px;
+    box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff;
+  }
+  .lightbox .tip{
+    position:absolute;bottom:20px;left:0;right:0;text-align:center;
+    color:#D8D8DE;font-size:13px;
+  }
+
+  .tl-item ul{margin:8px 0 0;padding:0;list-style:none}
+  .tl-item li{
+    font-size:14px;color:var(--ink-2);position:relative;
+    padding:3px 0 3px 16px;
+  }
+  .tl-item li::before{
+    content:"";position:absolute;left:2px;top:12px;width:5px;height:5px;
+    border-radius:50%;background:var(--red-soft);
+  }
+  .tl-item li b{color:var(--red);font-weight:700;margin-right:4px}
+  .tl-item h3 .cur{
+    font-size:11px;font-weight:700;color:#fff;background:var(--red);
+    border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:middle;
+  }
+
+  /* ---------- 大模型滚动墙 ---------- */
+  .models{
+    padding:96px 0 88px;
+    background:
+      radial-gradient(760px 340px at 12% 0%, #FFF0F3 0%, rgba(255,255,255,0) 68%),
+      radial-gradient(760px 340px at 88% 100%, #EFF3FF 0%, rgba(255,255,255,0) 68%),
+      #FFFFFF;
+  }
+  .marquee{
+    position:relative;display:flex;flex-direction:column;gap:16px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  }
+  .marquee-row{display:flex;gap:22px;width:max-content;will-change:transform;animation:marqL 95s linear infinite}
+  .marquee:hover .marquee-row{animation-play-state:paused}
+  @keyframes marqL{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+  @keyframes marqR{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+  .model{
+    display:inline-flex;align-items:center;gap:14px;flex:none;
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:14px 30px 14px 18px;font-size:17px;color:var(--ink);
+    box-shadow:0 2px 10px rgba(20,20,30,.04);
+    transition:border-color .25s, box-shadow .25s, transform .25s;
+  }
+  .model:hover{border-color:#FFC9D3;box-shadow:0 8px 24px rgba(224,16,60,.10);transform:translateY(-2px)}
+  .model img{
+    width:44px;height:44px;flex:none;object-fit:contain;
+    display:block;border-radius:10px;
+  }
+  .model b{font-weight:600;letter-spacing:.2px;white-space:nowrap}
+  @media (prefers-reduced-motion:reduce){.marquee-row{animation:none}}
+
+
+  /* ---------- 版本时间线（开发记录） ---------- */
+  .timeline{position:relative;max-width:860px;margin:0 auto;padding-left:34px}
+  .timeline::before{
+    content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--red-soft),var(--red-bg));
+  }
+  .tl-item{position:relative;padding:0 0 34px 22px}
+  .tl-item::before{
+    content:"";position:absolute;left:-33px;top:8px;width:14px;height:14px;border-radius:50%;
+    background:#fff;border:3px solid var(--red);
+  }
+  .tl-item .ver{font-size:13px;font-weight:800;color:var(--red);letter-spacing:1px}
+  .tl-item h3{font-size:18px;font-weight:700;margin:4px 0 6px}
+  .tl-item p{font-size:14.5px;color:var(--ink-2)}
+
+  /* ---------- 更新记录（近期） ---------- */
+  .changelog{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+  .cl-item{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px}
+  .cl-item .cl-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .cl-item .ver{font-weight:800;color:var(--red);font-size:16px}
+  .cl-item .theme{font-weight:700;font-size:15.5px}
+  .cl-item ul{margin-top:10px;padding-left:20px}
+  .cl-item li{font-size:14.3px;color:var(--ink-2);margin:5px 0}
+  .cl-item li b{color:var(--ink)}
+  .cl-tag{
+    font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:999px;
+    background:var(--red-bg);color:var(--red);letter-spacing:1px;
+  }
+  .cl-tag.fix{background:#FFF6E8;color:#B25E00}
+  .cl-tag.opt{background:#EEF6FF;color:#1565C0}
+
+  /* ---------- 下载 ---------- */
+  .download{background:var(--bg-soft)}
+  .dl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:880px;margin:0 auto}
+  @media (max-width:760px){.dl-grid{grid-template-columns:1fr}}
+  .dl-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:36px 32px;text-align:center;position:relative;transition:.25s;
+  }
+  .dl-card:hover{box-shadow:var(--shadow-sm)}
+  .dl-card .badge{
+    position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+    background:var(--red);color:#fff;font-size:12px;font-weight:700;
+    padding:4px 16px;border-radius:999px;letter-spacing:1px;
+  }
+  .dl-card img{width:64px;height:64px;border-radius:14px;margin:6px auto 16px}
+  .dl-card h3{font-size:19px;font-weight:800}
+  .dl-card .desc{font-size:14px;color:var(--ink-2);margin:8px 0 6px}
+  .dl-card .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:22px}
+  .dl-card .btn{width:100%;justify-content:center}
+  .dl-req{
+    max-width:880px;margin:26px auto 0;text-align:center;
+    font-size:13px;color:var(--ink-3);
+  }
+  .dl-req b{color:var(--ink-2)}
+
+  /* ---------- 联系我们 ---------- */
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:820px;margin:0 auto}
+  @media (max-width:760px){.contact-grid{grid-template-columns:1fr}}
+  .contact{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 20px;text-align:center;transition:.25s;
+  }
+  .contact:hover{border-color:#FFD7DE;box-shadow:var(--shadow-sm)}
+  .contact .ico{
+    width:54px;height:54px;margin:0 auto 14px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;background:#F5F5F7;
+  }
+  .contact .ico svg{width:26px;height:26px}
+  .contact .ico img{width:28px;height:28px}
+  .contact .ico.wechat{background:#EAF9F0;box-shadow:0 6px 16px rgba(7,193,96,.16)}
+  .contact .ico.phone{background:#FFE9EE;box-shadow:0 6px 16px rgba(224,16,60,.16)}
+  .contact .ico.mail{background:#EAF1FF;box-shadow:0 6px 16px rgba(47,107,255,.16)}
+  .contact b{display:block;font-size:15px;margin-bottom:4px}
+  .contact span{font-size:14px;color:var(--red);font-weight:600;letter-spacing:.5px}
+  .contact small{display:block;font-size:12px;color:var(--ink-3);margin-top:4px}
+
+  /* ---------- 页脚品牌字标（logo + 字，右滑入定格居中） ---------- */
+  .brandmark{
+    background:#141419;padding:74px 0 52px;overflow:hidden;position:relative;
+  }
+  .brandmark::before{  /* 字后面的品牌红光 */
+    content:"";position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);
+    width:56vw;height:190px;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(224,16,60,.20) 0%,rgba(224,16,60,0) 72%);
+    filter:blur(20px);
+  }
+  .bm-wrap{
+    position:relative;z-index:1;display:flex;justify-content:center;
+    padding:0 24px;overflow:hidden;
+  }
+  .bm-lockup{
+    display:flex;align-items:center;gap:clamp(10px,1.4vw,20px);
+    transform:translateX(82%);opacity:0;
+    transition:transform 1.7s cubic-bezier(.16,.86,.24,1),opacity 1.1s ease;
+    will-change:transform;
+  }
+  .brandmark.in .bm-lockup{transform:translateX(0);opacity:1}
+  .bm-logo{
+    width:clamp(34px,4.2vw,62px);height:auto;flex:none;display:block;
+    border-radius:23%;
+    box-shadow:0 10px 26px rgba(224,16,60,.30),0 2px 8px rgba(0,0,0,.4);
+    transform:rotate(-9deg) scale(.86);
+    transition:transform 1.5s cubic-bezier(.16,.86,.24,1) .2s;
+  }
+  .brandmark.in .bm-logo{transform:rotate(0) scale(1)}
+  .bm-word{
+    margin:0;font-size:clamp(30px,5.6vw,86px);font-weight:900;line-height:1.06;
+    letter-spacing:.01em;white-space:nowrap;
+    background:linear-gradient(180deg,#FFFFFF 6%,#EDEDF2 48%,rgba(237,237,242,.46) 94%,rgba(237,237,242,.34) 100%);
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;-webkit-text-fill-color:transparent;
+    user-select:none;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .bm-lockup{transform:none;opacity:1;transition:none}
+    .bm-logo{transform:none;transition:none}
+  }
+
+  /* ---------- 动画 ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.on{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- ================= 导航 ================= -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <img src="assets/logo/app_128.png" alt="灵犀AI主播 Logo">
+      灵犀<em>AI主播</em>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">功能特性</a>
+      <a href="#shots">界面预览</a>
+      <a href="#tech">技术实力</a>
+      <a href="#models">模型生态</a>
+      <a href="#changelog">技术更新</a>
+      <a href="#contact">联系我们</a>
+    </nav>
+    <a class="nav-cta" href="https://1811751250.share.123pan.cn/123pan/MpqRVv-h7uN">下载软件</a>
+  </div>
+</header>
+
+<!-- ================= Hero ================= -->
+<section class="hero" id="top" style="padding-bottom:96px">
+  <div class="wrap">
+    <span class="eyebrow">抖音直播 · AI 口播助手 · Windows 桌面端</span>
+    <h1>无人值守，也能<br>讲好直播间里的<span class="hl">每一件商品</span></h1>
+    <p class="sub">
+      灵犀AI主播覆盖「内容生产 — 直播播报 — 观众互动」全链路：商品链接一键生成千字文案，真人音色播报，弹幕AI回复，多篇文案无缝轮换，稳定可靠、不触发风控。
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://1811751250.share.123pan.cn/123pan/MpqRVv-h7uN">⬇ 下载最新版本</a>
+      <a class="btn btn-ghost" href="#features">了解功能特性</a>
+    </div>
+    <div class="hero-shot reveal">
+      <img src="assets/shots/app_full_2x.png" alt="灵犀AI主播 主界面预览">
+    </div>
+    <p class="version-tag">当前版本 v1.8.0 · 持续迭代更新中 · 支持 Windows 10 / 11（64 位）</p>
+  </div>
+</section>
+
+<!-- ================= 数据条 ================= -->
+<div class="stats">
+  <div class="wrap stats-grid reveal">
+    <div class="stat"><b>1500+</b><span>单篇文案字数</span></div>
+    <div class="stat"><b>约 3 秒</b><span>文案实时生成语音</span></div>
+    <div class="stat"><b>约 2 秒</b><span>实时对接抖音直播间</span></div>
+    <div class="stat"><b>7×24</b><span>小时无人值守直播</span></div>
+  </div>
+</div>
+
+<!-- ================= 功能特性 ================= -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">核心能力</span>
+      <h2>一个人，运营一支主播团队</h2>
+      <p>从写稿、合成、播报到弹幕互动，直播口播的每一个环节都被 AI 接管。</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="ico">✍️</div>
+        <h3>AI 一键写文案（火山方舟）</h3>
+        <p>接入国内头部大模型，粘贴商品链接秒级解析，按「场景 → 故事 → 卖点 → 人群 → 售后」六段式生成约 1000 字口播稿，附价格与规格核对清单，杜绝 AI 编造导致的直播事故。</p>
+      </div>
+      <div class="feat reveal">
+        <div class="ico">🎙️</div>
+        <h3>真人音色播报</h3>
+        <p>大模型语音合成，预置多款音色，支持音色复刻。开播前提供音色试听、全文试听、回复测试等五种试听验收，未开播也能把声音调到满意。</p>
+      </div>
+      <div class="feat reveal">
+        <div class="ico">💬</div>
+        <h3>弹幕智能互动</h3>
+        <p>实时接入直播间弹幕，AI 批量挑选最值得回复的 1~2 条生成回复并念出来，自动绑定当前商品上下文，绝不答非所问，也绝不重复回复。</p>
+      </div>
+      <div class="feat reveal">
+        <div class="ico">🔄</div>
+        <h3>文案无缝轮换</h3>
+        <p>设定 1~20 篇轮换，播到当前篇一半时后台自动生成并合成下一篇，读完零停顿接续；播完自动兜底至当日语音库随机播放，直播不断档。</p>
+      </div>
+      <div class="feat reveal">
+        <div class="ico">📚</div>
+        <h3>语音库 &amp; 文案库</h3>
+        <p>合成语音与文案按日期自动归档，命名规范、同内容去重；AI 自动识别商品名重命名文件，支持搜索、预览、双击加载与一键导出。</p>
+      </div>
+      <div class="feat reveal">
+        <div class="ico">⏰</div>
+        <h3>整点报时 · 手动插播</h3>
+        <p>整点随机话术报时活跃气氛；任意一句话实时转语音插播，插播结束后精准回到原讲解位置。中文数字自动转中文读法，「99 元」读作「九十九元」。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 功能展示：AI 写文案 ================= -->
+<section class="showcase" id="showcase-writer" style="background:var(--bg-soft)">
+  <div class="wrap showcase-row flip">
+    <div class="showcase-media reveal">
+      <img src="assets/shots/ui_writer.png" alt="AI 写文案窗口：粘贴商品链接，自动解析商品并生成口播文案">
+    </div>
+    <div class="showcase-copy reveal">
+      <span class="eyebrow">功能展示 · AI 写文案</span>
+      <h2>粘贴一个商品链接，<br>收获一篇能直接播的千字口播稿</h2>
+      <p>「AI 写文案」把内容生产压缩成一步：链接进去，口播稿出来。</p>
+      <ul>
+        <li><b>自动解析商品</b>：粘贴链接点「解析商品」，商品标题与卖点自动填入，解析失败也可手动粘贴兜底。</li>
+        <li><b>六段式长文案</b>：按「场景 → 故事 → 卖点 → 人群 → 售后 → 引导下单」生成约 1000 字，目标字数可调。</li>
+        <li><b>核对清单防翻车</b>：价格、规格、运费险、七天无理由、发货地单独列出，缺项强制标注「需人工确认」，杜绝 AI 编造报错价。</li>
+        <li><b>文案约束</b>：人设、口播风格、禁用词、违规词自由设定，生成后一键同步回主界面。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 工作流程 ================= -->
+<section class="flow" id="flow">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">使用流程</span>
+      <h2>五分钟，从安装到开播</h2>
+      <p>为非技术用户设计：只需填入 API Key，其余全部自动化。</p>
+    </div>
+    <div class="flow-steps">
+      <div class="step reveal"><h3>安装即用</h3><p>双击安装包，自定义安装目录，免管理员权限，装完即可运行。</p></div>
+      <div class="step reveal"><h3>填好 API Key</h3><p>内置国内主流大模型与语音平台官方地址，误填自动纠正；每组提供「测试连接」与「官方默认」一键还原。</p></div>
+      <div class="step reveal"><h3>扫码对接抖音</h3><p>扫码一次即完成直播间实时对接，约 2 秒读取账号与直播间信息，稳定可靠、不触发风控。</p></div>
+      <div class="step reveal"><h3>一键生成文案</h3><p>粘贴商品链接 → 解析 → 生成千字口播与核对清单 → 人工确认 → 合成语音。</p></div>
+      <div class="step reveal"><h3>开始直播</h3><p>选择输出设备，点「开始直播」自动连弹幕、合成语音、循环播报，进入无人值守状态。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 技术实力（深色段） ================= -->
+<section class="tech" id="tech">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">技术实力</span>
+      <h2>看不见的地方，下足了功夫</h2>
+      <p>多项核心技术难题被逐一攻克，成就 7×24 小时无人值守的稳定性与极致速度。</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>弹幕毫秒级实时接入</h3>
+        <p>多链路冗余接入、自动择优切换，断线秒级自动重连，历史弹幕自动补发；直播间切换自动重新识别，实时AI弹幕语音播报！</p>
+      </div>
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>AI 自动极速内容生成</h3>
+        <p>商品链接秒级解析完成，千字口播文案首字响应 0.8 秒、流式实时上屏，全程不卡顿；生成不足自动二次扩写，长文案一口气写完。</p>
+      </div>
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>AI 高速语音合成</h3>
+        <p>多任务并发调度 + 智能限流治理，千字文案语音数十秒内合成完毕；播放引擎多队列调度，插播结束精准回到原讲解位置，零停顿、零卡顿。</p>
+      </div>
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>7×24 小时无人值守</h3>
+        <p>多篇文案无缝轮换，播到一半后台已备好下一篇；全部播完自动切换语音库智能轮播兜底，直播永不断档，长时间运行零崩溃。</p>
+      </div>
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>AI 大模型互动引擎</h3>
+        <p>弹幕批量智能挑选，只回最值得回的；回复自动绑定当前商品上下文，绝不答非所问；内容级去重，绝不重复回复，且零额外大模型开销。</p>
+      </div>
+      <div class="tech-item reveal">
+        <h3><span class="dot"></span>数据安全与持续进化</h3>
+        <p>密钥与凭证本地加密存储，数据不出本机；内置自动更新，能力持续迭代升级，一次部署长期受益。</p>
+      </div>
+    </div>
+    <p class="tech-note">国内顶尖大模型：DeepSeek × 火山方舟（OpenAI 兼容协议） · 语音合成</p>
+  </div>
+</section>
+
+<!-- ================= 大模型生态 ================= -->
+<section class="models" id="models">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">模型生态</span>
+      <h2>全线接入全网主流大模型</h2>
+      <p>不绑定单一模型，按场景自由切换 —— 国内头部大模型与全球主流模型全面就绪，能力随模型升级同步进化。</p>
+    </div>
+  </div>
+  <div class="marquee" id="marquee">
+    <div class="marquee-row"><span class="model"><img src="assets/logo/app_128.png" alt="灵犀AI主播" loading="lazy"><b>灵犀AI主播</b></span><span class="model"><img src="assets/models/deepseek.svg" alt="DeepSeek" loading="lazy"><b>DeepSeek</b></span><span class="model"><img src="assets/models/doubao.png" alt="豆包" loading="lazy"><b>豆包</b></span><span class="model"><img src="assets/models/volcengine.png" alt="火山方舟" loading="lazy"><b>火山方舟</b></span><span class="model"><img src="assets/models/openai.svg" alt="OpenAI" loading="lazy"><b>OpenAI</b></span><span class="model"><img src="assets/models/qwen.svg" alt="通义千问" loading="lazy"><b>通义千问</b></span><span class="model"><img src="assets/models/kimi.svg" alt="KIMI" loading="lazy"><b>KIMI</b></span><span class="model"><img src="assets/models/claude.svg" alt="Claude" loading="lazy"><b>Claude</b></span><span class="model"><img src="assets/models/googlegemini.svg" alt="Gemini" loading="lazy"><b>Gemini</b></span></div>
+  </div>
+</section>
+
+<!-- ================= 界面预览 ================= -->
+<section id="shots">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">界面预览</span>
+      <h2>为直播运营设计的每一寸界面</h2>
+      <p>三栏布局、运行状态实时可视化 —— 功能在跑、播到第几篇，都一眼看出来。</p>
+    </div>
+    <div class="shot-grid">
+      <figure class="shot reveal">
+        <img src="assets/shots/card_2_2x.png" alt="自动轮换">
+        <figcaption><b>自动轮换 · 音色调度</b><span>设定文案篇数与主播音色，播完自动接续；到点自动切换下一位主播音色，长播不重样。</span></figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img src="assets/shots/card_4_2x.png" alt="文案创作区">
+        <figcaption><b>文案创作区</b><span>一键生成千字口播，支持约束词设定、文案库网格管理，列表实时高亮当前播报篇。</span></figcaption>
+      </figure>
+      <figure class="shot reveal">
+        <img src="assets/shots/card_6_2x.png" alt="直播间实时弹幕">
+        <figcaption><b>直播间实时弹幕</b><span>弹幕毫秒级刷新，支持自动回复、无效内容智能过滤，回复效果随时验收。</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 技术更新记录 ================= -->
+<section id="changelog">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">技术更新</span>
+      <h2>持续的技术更迭</h2>
+      <p>软件保持高频迭代，以下为近期版本的核心技术升级。</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="ver">v1.8.0</span>
+        <h3>品牌内核统一 · 全域视觉渲染管线<span class="cur">当前版本</span></h3>
+        <ul>
+          <li><b>视觉</b> 品牌资产统一渲染管线上线：矢量标识 + 多档位位图双轨输出，从 16px 图标到 4K 全屏按设备像素比自动择优，缩放锐度提升一档，模糊、锯齿全面消失。</li>
+          <li><b>AI</b> 生成式内容流水线重构：任务级并发调度 + 增量流式输出，长文案边生成边落盘，首字可见时间再压缩，连续生成不再出现段落空窗。</li>
+          <li><b>语音</b> 语音合成预取与多级缓存打通，段落切换提前预热，长时段轮播全程零空档、零卡顿。</li>
+          <li><b>链路</b> 弹幕语义分级理解 + 上下文会话缓存，重复问题自动归并，回复命中率与拟人度同步提升。</li>
+          <li><b>运行时</b> 图像与音频资源驻留策略重写，内存曲线长时间运行保持平稳，7×24 无人值守更放心。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.9</span>
+        <h3>自适应渲染内核 · 高密度控件重排</h3>
+        <ul>
+          <li><b>渲染</b> 自适应布局引擎二次重构：控件按容器剩余空间动态计算尺寸与折行策略，从 1080P 到 4K、从 1180px 窄窗到全屏，界面始终完整不裁切、不横向溢出。</li>
+          <li><b>性能</b> 核心调度链路瘦身，界面线程与业务线程彻底解耦，重排版与绘制分离执行，连续操作依旧顺滑跟手。</li>
+          <li><b>交互</b> 长文本输入升级为多行富文本编辑内核，回车即提交、Shift+回车换行，长口播稿一次贴完不用横向拖拽。</li>
+          <li><b>兼容</b> 跨 DPI 缩放适配完善：系统 125%、150%、200% 缩放下控件不模糊、不挤压，高分屏显示更锐利。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.x</span><h3>实时推理加速与零拷贝渲染</h3>
+        <ul>
+          <li><b>加速</b> 推理请求批处理与连接复用，短指令往返时延压至毫秒级，弹幕高峰依旧秒回。</li>
+          <li><b>渲染</b> 界面零拷贝重绘 + 脏区域增量刷新，长时间高频刷新下 CPU 占用显著下降。</li>
+          <li><b>健壮</b> 全链路异常自愈守护：任一子模块异常自动隔离重启，主流程无感知继续运行。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.8</span><h3>播报调度追踪引擎</h3>
+        <ul>
+          <li><b>调度</b> 播报进度改为毫秒级实时追踪，逐句定位当前播报位置，界面高亮与语音输出严格同帧，绝不错位。</li>
+          <li><b>并发</b> 后台生成新文案、前台持续播报、列表实时插入三路并发写入，索引自动跟随重算，长时段轮播定位不漂移。</li>
+          <li><b>连续</b> 断点续播与插播归位策略升级：插播结束精准回到原进度，轮播衔接无缝，听感如真人连续讲述。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.7</span><h3>事件总线与响应链路优化</h3>
+        <ul>
+          <li><b>性能</b> 交互事件总线重写，信号派发零冗余转发，点击到响应全程无阻塞、不排队，连点百次不掉帧。</li>
+          <li><b>稳定</b> 高频操作下的重入保护机制上线，重复触发自动合并，杜绝重复合成、重复播报。</li>
+          <li><b>体感</b> 状态反馈即时化：按钮点击即变色、任务进度实时回显，操作始终「有回应」。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.6</span><h3>运行状态机与生命周期治理</h3>
+        <ul>
+          <li><b>架构</b> 引入完整任务状态机：待机 / 生成中 / 播报中 / 暂停 / 异常五态互斥流转，状态非法跳转在编译期即被拦截。</li>
+          <li><b>可靠</b> 对象生命周期统一托管，线程与音频资源即用即释，连续数十小时运行内存不膨胀、句柄不泄漏。</li>
+          <li><b>可观测</b> 运行状态实时可视化，卡在哪一步一眼可见，长时无人值守更可控。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.5</span><h3>商品智能识别与全链路自检</h3>
+        <ul>
+          <li><b>AI</b> 商品名智能反推上线：大模型从正文语义中抽取核心商品词，准确率大幅提升，粘贴或导入的文案自动识别、归档文件同步智能重命名。</li>
+          <li><b>自动化</b> 语音库 / 文案库双库联动归档，文件名自带日期、篇号与商品名，几百条素材也能秒级检索。</li>
+          <li><b>运维</b> 接口连通性全自动自检：三家服务商地址误填自动纠正，链路故障秒级定位到具体环节。</li>
+          <li><b>性能</b> 短任务推理策略优化（精简提示词 + 关闭冗余推理链），弹幕回复更快、单次调用成本更低。</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal">
+        <span class="ver">v1.7.3 ~ v1.7.4</span><h3>弹幕多通道冗余与智能重连</h3>
+        <ul>
+          <li><b>架构</b> 双通道弹幕接入 + 自动降级：主通道异常即时切换备份通道，单点故障不影响继续收弹幕。</li>
+          <li><b>算法</b> 重连策略重写为指数退避 + 随机抖动，规避服务端限流，弱网与断流场景下秒级自愈。</li>
+          <li><b>自动化</b> 开播自动接入、停播自动断开；直播间断流或切房自动重新识别并补发历史弹幕，全程零人工干预。</li>
+          <li><b>实时性</b> 弹幕到达即解析、即入库、即推送界面，端到端延迟压缩到百毫秒级，互动不延迟。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 下载 ================= -->
+<section class="download" id="download">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">软件下载</span>
+      <h2>下载灵犀AI主播</h2>
+      <p>双击即用的 Windows 桌面软件，安装完成即可开始使用。</p>
+    </div>
+    <div class="dl-grid" style="grid-template-columns:minmax(0,520px);justify-content:center;margin-top:26px">
+      <div class="dl-card reveal">
+        <span class="badge">当前版本 v1.8.0</span>
+        <img src="assets/logo/app_128.png" alt="安装包图标">
+        <h3>灵犀AI主播</h3>
+        <p class="desc">图形化安装向导，支持自定义安装目录，不强制系统盘，免管理员权限，装完即用。</p>
+        <p class="meta">Windows 10 / 11（64 位） · 约 163 MB</p>
+        <!-- 部署时将 href 替换为实际下载地址（GitHub Releases / 网盘直链均可） -->
+        <a class="btn btn-primary" href="https://1811751250.share.123pan.cn/123pan/MpqRVv-h7uN">立即下载</a>
+      </div>
+    </div>
+    <p class="dl-req">
+      系统要求：<b>Windows 10 / 11（64 位）</b>，需已安装Chrome浏览器。<br>
+      <b>Windows 7存在兼容性问题，需升级 Windows 10 或 Windows 11 后使用。</b>
+    </p>
+  </div>
+</section>
+
+<!-- ================= 联系我们 ================= -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">联系我们</span>
+      <h2>获取软件与技术支持</h2>
+      <p>软件购买、使用咨询、问题反馈与技术对接，欢迎随时联系。</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact reveal">
+        <div class="ico wechat"><img src="assets/icons/wechat.svg" alt="微信"></div>
+        <b>微信</b>
+        <span>dashuaiceo</span>
+        <small>添加请备注「灵犀」</small>
+      </div>
+      <div class="contact reveal">
+        <div class="ico phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#E0103C" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.8.3 1.6.6 2.3a2 2 0 0 1-.5 2.1L8.1 9.2a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.7.3 1.5.5 2.3.6a2 2 0 0 1 1.7 2z"/>
+          </svg>
+        </div>
+        <b>电话</b>
+        <span>181-3717-5158</span>
+        <small>工作日 9:00 - 21:00</small>
+      </div>
+      <div class="contact reveal">
+        <div class="ico mail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m2 7 10 6 10-6"/>
+          </svg>
+        </div>
+        <b>邮箱</b>
+        <span>1014859201@qq.com</span>
+        <small>商务合作与问题反馈</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 品牌字标 ================= -->
+<section class="brandmark" id="brandmark" aria-label="灵犀 AI 主播">
+  <div class="bm-wrap">
+    <div class="bm-lockup">
+      <img class="bm-logo" src="assets/logo/app_256.png" alt="灵犀AI主播 Logo">
+      <h2 class="bm-word">灵犀 AI 主播</h2>
+    </div>
+  </div>
+</section>
+
+
+<div class="lightbox" id="lightbox"><img alt="放大预览"><div class="tip">点击任意处关闭</div></div>
+
+<script>
+  // 滚动渐显
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // 大模型墙无缝循环：内容复制一份，位移 50% 即无缝
+  document.querySelectorAll('.marquee-row').forEach(row=>{
+    const base = row.innerHTML;
+    row.innerHTML = base + base;
+    // 大屏下两份仍不够宽时翻倍成四份，保证 -50% 位移始终无缝
+    if (row.scrollWidth < window.innerWidth * 2) row.innerHTML += row.innerHTML;
+  });
+
+  // 页脚品牌字：进入视口后从右滑入并定格在中间
+  const bm = document.getElementById('brandmark');
+  if (bm){
+    const bmIO = new IntersectionObserver((es)=>{
+      es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); bmIO.unobserve(e.target); } });
+    },{threshold:.35});
+    bmIO.observe(bm);
+  }
+
+  // 截图点击查看
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('img');
+  document.querySelectorAll('.shot img').forEach(img=>{
+    img.addEventListener('click', ()=>{ lbImg.src = img.src; lb.classList.add('on'); });
+  });
+  lb.addEventListener('click', ()=> lb.classList.remove('on'));
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') lb.classList.remove('on'); });
+</script>
+</body>
+</html>
